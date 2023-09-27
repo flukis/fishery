@@ -26,6 +26,19 @@
             gap: 1rem;
         }
     }
+
+    .paper__bodywrapper {
+        display: flex;
+        column-gap: 1.5rem;
+        align-items: center;
+    }
+}
+
+.separator {
+    height: 1px;
+    color: rgba(0, 0, 0, 0.05);
+    width: 100%;
+    margin-block: 1.25rem;
 }
 
 .btn {
@@ -102,5 +115,25 @@
 
     &:focus {
         outline: none;
+    }
+}
+
+.select-option {
+    width: 320px;
+    flex-shrink: 0;
+
+    .select-option__checkbox_option {
+        display: flex;
+        gap: .5rem;
+    }
+}
+
+.select-option_sm {
+    width: 128px;
+    flex-shrink: 0;
+
+    .select-option__checkbox_option {
+        display: flex;
+        gap: .5rem;
     }
 }
