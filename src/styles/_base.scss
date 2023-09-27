@@ -1,5 +1,19 @@
 // reset, variables, mixinx, and utility
 
+// variable
+
+$primary: #038767;
+$primary-darker: #02513e;
+
+$light-gray: #6b7280;
+$dark-gray: #313131;
+// Desktop Width
+$desktop-width: 1200px;
+// Tablet Width
+$tablet-width: 768px;
+// Mobile Width
+$mobile-width: 360px;
+
 // reset
 /*
     1. Use a more-intuitive box-sizing model.
@@ -92,7 +106,13 @@ p, h1, h2, h3, h4, h5, h6 {
 
 body {
     font-family: "Inter", Arial, Helvetica, sans-serif;
+    background-color: whitesmoke;
 }
 
-$primary: #038767;
-$primary-darker: #02513e;
+footer {
+  padding-block: 1.25rem;
+  text-align: center;
+  color: $light-gray;
+  font-size: .85rem;
+  font-weight: 300;
+}

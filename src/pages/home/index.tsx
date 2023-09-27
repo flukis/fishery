@@ -2,8 +2,8 @@ import { Link } from "react-router-dom";
 export default function HomePage() {
   return (
     <main className="absolute-center">
-      <Link to="/fishery-price" className="btn-primary">
-        <span>Fishery Price Lists</span>
+      <Link to="/fishery-price" className="btn btn-primary">
+        <span>Data Harga Perikanan</span>
         <svg
           width="17"
           height="16"
