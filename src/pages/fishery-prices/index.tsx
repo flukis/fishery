@@ -1,70 +1,70 @@
 import { useMemo } from "react";
 import Paper from "../../modules/paper";
 import SelectWithTag from "../../modules/select-with-tag";
-import Separator from "../../modules/separator";
+import TableWithPagination from "../../modules/table";
+import useApiCall from "../../utils/data/api-calls";
 
-import { Person, makeData } from "../../modules/table/makeData";
+import { type fisheryData } from "./loader";
+import { createColumnHelper } from "@tanstack/react-table";
+import { formatDate } from "../../utils/helpers/format-date";
+import { formatRupiah } from "../../utils/helpers/format-rupiah";
 
-import { ColumnDef } from "@tanstack/react-table";
-import Table from "../../modules/table";
+const url = `https://stein.efishery.com/v1/storages/5e1edf521073e315924ceab4/list?limit=10&offset=0`;
 
 export default function FisheryPricesPage() {
-  const columns = useMemo<ColumnDef<Person>[]>(
+  const { isLoading, data, error } = useApiCall(url);
+
+  const columnHelper = createColumnHelper<fisheryData>();
+
+  const columns = useMemo(
     () => [
-      {
-        header: "Name",
-        footer: (props) => props.column.id,
-        columns: [
-          {
-            accessorKey: "firstName",
-            cell: (info) => info.getValue(),
-            footer: (props) => props.column.id,
-          },
-          {
-            accessorFn: (row) => row.lastName,
-            id: "lastName",
-            cell: (info) => info.getValue(),
-            header: () => <span>Last Name</span>,
-            footer: (props) => props.column.id,
-          },
-        ],
-      },
-      {
-        header: "Info",
-        footer: (props) => props.column.id,
-        columns: [
-          {
-            accessorKey: "age",
-            header: () => "Age",
-            footer: (props) => props.column.id,
-          },
-          {
-            header: "More Info",
-            columns: [
-              {
-                accessorKey: "visits",
-                header: () => <span>Visits</span>,
-                footer: (props) => props.column.id,
-              },
-              {
-                accessorKey: "status",
-                header: "Status",
-                footer: (props) => props.column.id,
-              },
-              {
-                accessorKey: "progress",
-                header: "Profile Progress",
-                footer: (props) => props.column.id,
-              },
-            ],
-          },
-        ],
-      },
+      columnHelper.accessor("komoditas", {
+        cell: (info) => {
+          return <div style={{ fontWeight: 600 }}>{info.getValue()}</div>;
+        },
+        header: () => "Komoditi",
+      }),
+      columnHelper.accessor("area_provinsi", {
+        cell: ({ row: { original } }) => {
+          return `${original.area_kota}, ${original.area_provinsi}`;
+        },
+        header: () => "Daerah",
+      }),
+      columnHelper.accessor("price", {
+        cell: (info) => {
+          return (
+            <div
+              style={{
+                textAlign: "right",
+                fontFamily: "mono",
+              }}
+            >
+              {formatRupiah(info.getValue())}
+            </div>
+          );
+        },
+        header: () => <div style={{ textAlign: "right" }}>Harga</div>,
+      }),
+      columnHelper.accessor("size", {
+        cell: (info) => {
+          return <div style={{ textAlign: "right" }}>{info.getValue()}</div>;
+        },
+        header: () => <div style={{ textAlign: "right" }}>Ukuran</div>,
+      }),
+      columnHelper.accessor("tgl_parsed", {
+        cell: (info) => {
+          return (
+            <div style={{ textAlign: "center" }}>
+              {formatDate(info.getValue())}
+            </div>
+          );
+        },
+        header: () => <div style={{ textAlign: "center" }}>Tanggal</div>,
+      }),
     ],
     []
   );
 
-  const data = makeData(100000);
   return (
     <Paper>
       <div className="paper__titlewrapper">
@@ -90,8 +90,7 @@ export default function FisheryPricesPage() {
           </button>
         </div>
       </div>
-      <div className="paper__bodywrapper" style={{ marginTop: "1.25rem" }}>
-        <span style={{ width: "100%" }} />
+      <div className="paper__bodywrapper" style={{ marginBlock: "1.5rem" }}>
         <SelectWithTag
           defaultValue={[]}
           options={[
@@ -103,16 +102,14 @@ export default function FisheryPricesPage() {
           callback={(val) => console.log(val)}
         />
       </div>
-      <Separator />
       <div>
-        <>
-          <Table
-            {...{
-              data,
-              columns,
-            }}
-          />
-        </>
+        {isLoading ? (
+          "Loading"
+        ) : error ? (
+          "Error"
+        ) : (
+          <TableWithPagination data={data} columns={columns} key="table" />
+        )}
       </div>
     </Paper>
   );

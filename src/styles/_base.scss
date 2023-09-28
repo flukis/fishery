@@ -116,3 +116,41 @@ footer {
   font-size: .85rem;
   font-weight: 300;
 }
+
+table {
+    font-size: 1rem;
+    font-weight: normal;
+    border: none;
+    border-collapse: collapse;
+    width: 100%;
+    max-width: 100%;
+    white-space: nowrap;
+    border-radius: .5rem;
+    overflow: hidden;
+    color: $dark-gray;
+
+    td, th {
+        text-align: left;
+        padding: 1rem .75rem;
+    }
+
+    td {
+        border: 1px solid whitesmoke;
+        font-size: 14px;
+    }
+
+    thead th {
+        color: $dark-gray;
+        background: whitesmoke;
+    }
+
+    tbody tr {
+        color: $dark-gray;
+        background: white;
+
+        &:hover {
+            background: whitesmoke;
+        }
+    }
+}
+

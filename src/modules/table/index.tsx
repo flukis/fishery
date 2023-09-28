@@ -1,83 +1,83 @@
 import {
-  Column,
-  Table as ReactTable,
-  useReactTable,
-  getCoreRowModel,
-  getFilteredRowModel,
-  getPaginationRowModel,
-  ColumnDef,
   flexRender,
+  getCoreRowModel,
+  getPaginationRowModel,
+  useReactTable,
 } from "@tanstack/react-table";
-import { Person } from "./makeData";
+import { useState } from "react";
 
-export default function Table({
+export default function TableWithPagination({
   data,
   columns,
 }: {
-  data: Person[];
-  columns: ColumnDef<Person>[];
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  data: any;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  columns: any;
 }) {
   const table = useReactTable({
     data,
     columns,
-    // Pipeline
     getCoreRowModel: getCoreRowModel(),
-    getFilteredRowModel: getFilteredRowModel(),
     getPaginationRowModel: getPaginationRowModel(),
-    //
-    debugTable: true,
   });
 
+  const [state, setState] = useState(table.initialState);
+
+  table.setOptions((prev) => ({
+    ...prev,
+    state,
+    onStateChange: setState,
+  }));
+
   return (
-    <div className="p-2">
-      <div className="h-2" />
+    <div style={{ overflowX: "auto" }}>
       <table>
         <thead>
           {table.getHeaderGroups().map((headerGroup) => (
             <tr key={headerGroup.id}>
-              {headerGroup.headers.map((header) => {
-                return (
-                  <th key={header.id} colSpan={header.colSpan}>
-                    {header.isPlaceholder ? null : (
-                      <div>
-                        {flexRender(
-                          header.column.columnDef.header,
-                          header.getContext()
-                        )}
-                        {header.column.getCanFilter() ? (
-                          <div>
-                            <Filter column={header.column} table={table} />
-                          </div>
-                        ) : null}
-                      </div>
-                    )}
-                  </th>
-                );
-              })}
+              {headerGroup.headers.map((header) => (
+                <th key={header.id} colSpan={header.colSpan}>
+                  {header.isPlaceholder
+                    ? null
+                    : flexRender(
+                        header.column.columnDef.header,
+                        header.getContext()
+                      )}
+                </th>
+              ))}
             </tr>
           ))}
         </thead>
         <tbody>
-          {table.getRowModel().rows.map((row) => {
-            return (
-              <tr key={row.id}>
-                {row.getVisibleCells().map((cell) => {
-                  return (
-                    <td key={cell.id}>
-                      {flexRender(
-                        cell.column.columnDef.cell,
-                        cell.getContext()
-                      )}
-                    </td>
-                  );
-                })}
-              </tr>
-            );
-          })}
+          {table.getRowModel().rows.map((row) => (
+            <tr key={row.id}>
+              {row.getVisibleCells().map((cell) => (
+                <td key={cell.id}>
+                  {flexRender(cell.column.columnDef.cell, cell.getContext())}
+                </td>
+              ))}
+            </tr>
+          ))}
         </tbody>
+        <tfoot>
+          {table.getFooterGroups().map((footerGroup) => (
+            <tr key={footerGroup.id}>
+              {footerGroup.headers.map((header) => (
+                <th key={header.id} colSpan={header.colSpan}>
+                  {header.isPlaceholder
+                    ? null
+                    : flexRender(
+                        header.column.columnDef.footer,
+                        header.getContext()
+                      )}
+                </th>
+              ))}
+            </tr>
+          ))}
+        </tfoot>
       </table>
-      <div className="h-2" />
-      <div className="flex items-center gap-2">
+      <div>
         <button
           className="border rounded p-1"
           onClick={() => table.setPageIndex(0)}
@@ -138,60 +138,6 @@ export default function Table({
           ))}
         </select>
       </div>
-      <div>{table.getRowModel().rows.length} Rows</div>
-      <pre>{JSON.stringify(table.getState().pagination, null, 2)}</pre>
     </div>
-  );
-}
-function Filter({
-  column,
-  table,
-}: {
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  column: Column<any, any>;
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  table: ReactTable<any>;
-}) {
-  const firstValue = table
-    .getPreFilteredRowModel()
-    .flatRows[0]?.getValue(column.id);
-
-  const columnFilterValue = column.getFilterValue();
-
-  return typeof firstValue === "number" ? (
-    <div className="flex space-x-2">
-      <input
-        type="number"
-        value={(columnFilterValue as [number, number])?.[0] ?? ""}
-        onChange={(e) =>
-          column.setFilterValue((old: [number, number]) => [
-            e.target.value,
-            old?.[1],
-          ])
-        }
-        placeholder={`Min`}
-        className="w-24 border shadow rounded"
-      />
-      <input
-        type="number"
-        value={(columnFilterValue as [number, number])?.[1] ?? ""}
-        onChange={(e) =>
-          column.setFilterValue((old: [number, number]) => [
-            old?.[0],
-            e.target.value,
-          ])
-        }
-        placeholder={`Max`}
-        className="w-24 border shadow rounded"
-      />
-    </div>
-  ) : (
-    <input
-      type="text"
-      value={(columnFilterValue ?? "") as string}
-      onChange={(e) => column.setFilterValue(e.target.value)}
-      placeholder={`Search...`}
-      className="w-36 border shadow rounded"
-    />
   );
 }
