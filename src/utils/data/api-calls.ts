@@ -36,8 +36,8 @@ function useApiWebWorker(apiUrl: string) {
       try {
         worker.postMessage({ type: "through", url: apiUrl });
         worker.onmessage = function (ev) {
-          const data = JSON.parse(ev.data);
-          setData(data);
+          const resp = ev.data;
+          setData(resp);
         };
       } catch (err) {
         setError(err);

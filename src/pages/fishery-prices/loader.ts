@@ -7,5 +7,7 @@ type fisheryData = {
   price: number;
   tgl_parsed: Date;
 };
+const urlData = `https://stein.efishery.com/v1/storages/5e1edf521073e315924ceab4/list`;
+const urlArea = `https://stein.efishery.com/v1/storages/5e1edf521073e315924ceab4/option_area`;
 
-export { type fisheryData };
+export { type fisheryData, urlData, urlArea };

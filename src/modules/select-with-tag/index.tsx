@@ -2,7 +2,7 @@ import { useState } from "react";
 import Select, { components } from "react-select";
 
 const ValueComponent = ({ children, ...props }) => {
-  const { getValue, hasValue } = props;
+  const { getValue, hasValue, options } = props;
   const length = getValue().length;
   if (!hasValue) {
     return (
@@ -13,7 +13,9 @@ const ValueComponent = ({ children, ...props }) => {
   }
   return (
     <components.ValueContainer {...props}>
-      {`${length} provinsi terpilih`}
+      {options.length === length
+        ? "Semua Provinsi"
+        : `${length} provinsi terpilih`}
     </components.ValueContainer>
   );
 };
@@ -79,37 +81,47 @@ export default function SelectWithTag({
   defaultValue,
   options,
   callback,
+  placeholder,
+  label,
+  loading = false,
 }: {
-  defaultValue: SelectOptions;
+  defaultValue: Array<string | number>;
   options: Array<SelectOptions>;
   callback: (val: Array<string | number>) => void;
+  placeholder: string;
+  label: string;
+  loading?: boolean;
 }) {
   return (
-    <Select
-      placeholder="Pilih Provinsi"
-      defaultValue={defaultValue}
-      isMulti
-      closeMenuOnSelect={false}
-      hideSelectedOptions={false}
-      onChange={(options) => {
-        if (Array.isArray(options)) {
-          callback(options.map((opt) => opt.value));
-        }
-      }}
-      autosize={false}
-      className="select-option"
-      options={options}
-      components={{
-        Option: InputOption,
-        ValueContainer: ValueComponent,
-      }}
-      theme={(theme) => ({
-        ...theme,
-        colors: {
-          ...theme.colors,
-          primary: "#6b7280",
-        },
-      })}
-    />
+    <div>
+      <label htmlFor={label.trim()}>{label}</label>
+      <Select
+        placeholder={placeholder}
+        defaultValue={defaultValue}
+        isMulti
+        closeMenuOnSelect={false}
+        hideSelectedOptions={false}
+        onChange={(options) => {
+          if (Array.isArray(options)) {
+            callback(options.map((opt) => opt.value));
+          }
+        }}
+        autosize={false}
+        className="select-option select-option_default"
+        options={options}
+        components={{
+          Option: InputOption,
+          ValueContainer: ValueComponent,
+        }}
+        theme={(theme) => ({
+          ...theme,
+          colors: {
+            ...theme.colors,
+            primary: "#6b7280",
+          },
+        })}
+        isLoading={loading}
+      />
+    </div>
   );
 }

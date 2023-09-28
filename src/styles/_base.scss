@@ -129,14 +129,28 @@ table {
     overflow: hidden;
     color: $dark-gray;
 
-    td, th {
+    th {
         text-align: left;
+        padding: .5rem .75rem;
         padding: 1rem .75rem;
+        border-width: .25rem;
+        border-style: solid;
+        border-color: whitesmoke;
+        cursor: pointer;
+    }
+
+    .asc {
+        border-top-color: $primary;
+    }
+
+    .desc {
+        border-bottom-color:  $primary;
     }
 
     td {
         border: 1px solid whitesmoke;
         font-size: 14px;
+        padding: 1rem .75rem;
     }
 
     thead th {
@@ -149,8 +163,14 @@ table {
         background: white;
 
         &:hover {
-            background: whitesmoke;
+            background: #f8f8f8;
         }
     }
 }
 
+
+label {
+    font-size: 14px;
+    color: $dark-gray;
+    line-height: 35px;
+}

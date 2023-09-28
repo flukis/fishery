@@ -1,4 +1,4 @@
-import { useMemo } from "react";
+import { useEffect, useMemo, useState } from "react";
 import Paper from "../../modules/paper";
 import SelectWithTag from "../../modules/select-with-tag";
 import TableWithPagination from "../../modules/table";
@@ -9,22 +9,34 @@ import { createColumnHelper } from "@tanstack/react-table";
 import { formatDate } from "../../utils/helpers/format-date";
 import { formatRupiah } from "../../utils/helpers/format-rupiah";
 import { SelectOptions } from "../../modules/select";
-
-const url = `https://stein.efishery.com/v1/storages/5e1edf521073e315924ceab4/list`;
-const urlArea = `https://stein.efishery.com/v1/storages/5e1edf521073e315924ceab4/option_area`;
+import { urlArea, urlData } from "./loader";
 
 export default function FisheryPricesPage() {
-  const { isLoading, data, error } = useApiWebWorker(url);
-  const {
-    isLoading: idLoadingArea,
-    data: dataArea,
-    error: errorArea,
-  } = useApiCall(urlArea);
+  const { isLoading, data, error } = useApiWebWorker(urlData);
+  const { isLoading: isLoadingArea, data: dataArea } = useApiCall(urlArea);
+
+  const [filteredData, setFilteredData] = useState([]);
+  const [filterProvinsi, setFilterProvinsi] = useState<Array<string>>([]);
+
+  useEffect(() => {
+    if (filterProvinsi.length == 0) {
+      return setFilteredData(data || []);
+    } else {
+      const filtProv = (data || []).filter((d) =>
+        filterProvinsi.includes(d.area_provinsi)
+      );
+      setFilteredData(filtProv);
+    }
+  }, [data, filterProvinsi]);
 
   const formatedDataArea: Array<SelectOptions> = useMemo(() => {
-    const buf = (dataArea || []).map((d: { province: string }) => ({
-      value: d.province,
-      label: d.province,
+    const provinsi = (dataArea || []).map(({ province }) => province);
+
+    const cleanedProvinsi = [...new Set(provinsi)];
+
+    const buf = (cleanedProvinsi || []).map((p) => ({
+      value: p,
+      label: p,
     }));
     return buf;
   }, [dataArea]);
@@ -34,18 +46,21 @@ export default function FisheryPricesPage() {
   const columns = useMemo(
     () => [
       columnHelper.accessor("komoditas", {
+        size: 180,
         cell: (info) => {
           return <div style={{ fontWeight: 600 }}>{info.getValue()}</div>;
         },
         header: () => "Komoditi",
       }),
       columnHelper.accessor("area_provinsi", {
+        size: 300,
         cell: ({ row: { original } }) => {
           return `${original.area_kota}, ${original.area_provinsi}`;
         },
         header: () => "Daerah",
       }),
       columnHelper.accessor("price", {
+        size: 180,
         cell: (info) => {
           return (
             <div
@@ -112,15 +127,24 @@ export default function FisheryPricesPage() {
           "Error"
         ) : (
           <TableWithPagination
-            data={data || []}
+            data={filteredData}
             columns={columns}
             key="table"
             renderedFilter={
-              <div>
+              <div
+                style={{
+                  display: "flex",
+                  justifyContent: "space-between",
+                  width: "100%",
+                }}
+              >
                 <SelectWithTag
-                  defaultValue={formatedDataArea[0]}
+                  defaultValue={formatedDataArea.map((opt) => opt.value)}
                   options={formatedDataArea}
-                  callback={(val) => console.log(val)}
+                  callback={(v) => setFilterProvinsi(v)}
+                  placeholder="Pilih Provinsi"
+                  label="Filter berdasarkan Provinsi"
+                  loading={isLoadingArea}
                 />
               </div>
             }

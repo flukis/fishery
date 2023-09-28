@@ -2,8 +2,9 @@ import {
   flexRender,
   useReactTable,
   getCoreRowModel,
-  getFilteredRowModel,
   getPaginationRowModel,
+  SortingState,
+  getSortedRowModel,
 } from "@tanstack/react-table";
 import { ReactNode, useState } from "react";
 
@@ -39,21 +40,18 @@ export default function TableWithPagination({
   columns: any;
   renderedFilter: ReactNode;
 }) {
+  const [sorting, setSorting] = useState<SortingState>([]);
   const table = useReactTable({
     data,
     columns,
-    getFilteredRowModel: getFilteredRowModel(),
     getCoreRowModel: getCoreRowModel(),
     getPaginationRowModel: getPaginationRowModel(),
+    state: {
+      sorting,
+    },
+    onSortingChange: setSorting,
+    getSortedRowModel: getSortedRowModel(),
   });
-
-  const [state, setState] = useState(table.initialState);
-
-  table.setOptions((prev) => ({
-    ...prev,
-    state,
-    onStateChange: setState,
-  }));
 
   return (
     <div className="table-wrapper">
@@ -61,15 +59,17 @@ export default function TableWithPagination({
         {renderedFilter}
         <div>
           <InputSelect
+            label="Data Per Halaman"
             placeholder="Select per Page"
             options={perPage}
             defaultValue={{
               label: String(table.getState().pagination.pageSize),
-              value: table.getState().pagination.pageSize,
+              value: String(table.getState().pagination.pageSize),
             }}
             callback={(v) => {
               table.setPageSize(Number(v));
             }}
+            size="sm"
           />
         </div>
       </div>
@@ -77,16 +77,40 @@ export default function TableWithPagination({
         <thead>
           {table.getHeaderGroups().map((headerGroup) => (
             <tr key={headerGroup.id}>
-              {headerGroup.headers.map((header) => (
-                <th key={header.id} colSpan={header.colSpan}>
-                  {header.isPlaceholder
-                    ? null
-                    : flexRender(
-                        header.column.columnDef.header,
-                        header.getContext()
-                      )}
-                </th>
-              ))}
+              {headerGroup.headers.map((header) => {
+                return (
+                  <th
+                    key={header.id}
+                    colSpan={header.colSpan}
+                    style={{
+                      width:
+                        header.getSize() !== 150 ? header.getSize() : undefined,
+                    }}
+                    className={
+                      {
+                        asc: "asc",
+                        desc: "desc",
+                      }[header.column.getIsSorted() as string] ?? ""
+                    }
+                  >
+                    {header.isPlaceholder ? null : (
+                      <div
+                        {...{
+                          className: header.column.getCanSort()
+                            ? "cursor-pointer select-none"
+                            : "",
+                          onClick: header.column.getToggleSortingHandler(),
+                        }}
+                      >
+                        {flexRender(
+                          header.column.columnDef.header,
+                          header.getContext()
+                        )}
+                      </div>
+                    )}
+                  </th>
+                );
+              })}
             </tr>
           ))}
         </thead>

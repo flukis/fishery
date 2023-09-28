@@ -119,21 +119,18 @@
 }
 
 .select-option {
-    width: 320px;
-
     .select-option__checkbox_option {
         display: flex;
         gap: .5rem;
     }
 }
 
+.select-option_default {
+    width: 320px;
+}
+
 .select-option_sm {
     width: 128px;
-
-    .select-option__checkbox_option {
-        display: flex;
-        gap: .5rem;
-    }
 }
 
 .table-wrapper {

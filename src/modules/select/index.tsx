@@ -10,19 +10,25 @@ export default function InputSelect({
   options,
   callback,
   placeholder,
+  label = "Select",
+  size = "default",
 }: {
   defaultValue: SelectOptions;
   options: Array<SelectOptions>;
   callback: (val: string | number) => void;
   placeholder: string;
+  label: string;
+  size?: "sm" | "default";
 }) {
   return (
     <div>
+      <label htmlFor={label.trim()}>{label}</label>
       <Select
-        defaultValue={{ label: defaultValue.label, value: defaultValue.value }}
+        id={label.trim()}
+        defaultValue={defaultValue}
         placeholder={placeholder}
         options={options}
-        className="select-option_sm"
+        className={`select-option select-option_${size}`}
         onChange={(opt) => {
           callback(opt.value);
         }}

@@ -24,9 +24,9 @@ self.addEventListener("message", async (event) => {
 
   if (type === "around") {
     const response = await fetchAround(url);
-    self.postMessage(await response.text());
+    self.postMessage(await response.json());
   } else if (type === "through") {
     const response = await fetchThrough(url);
-    self.postMessage(await response.text());
+    self.postMessage(await response.json());
   }
 });
