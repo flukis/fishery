@@ -10,24 +10,35 @@ import { formatDate } from "../../utils/helpers/format-date";
 import { formatRupiah } from "../../utils/helpers/format-rupiah";
 import { SelectOptions } from "../../modules/select";
 import { urlArea, urlData } from "./loader";
+import InputSearch from "../../modules/search";
 
 export default function FisheryPricesPage() {
   const { isLoading, data, error } = useApiWebWorker(urlData);
   const { isLoading: isLoadingArea, data: dataArea } = useApiCall(urlArea);
 
   const [filteredData, setFilteredData] = useState([]);
+  const [search, setSearch] = useState("");
   const [filterProvinsi, setFilterProvinsi] = useState<Array<string>>([]);
 
   useEffect(() => {
     if (filterProvinsi.length == 0) {
-      return setFilteredData(data || []);
+      if (search === "") return setFilteredData(data || []);
+
+      const temp = (data || []).filter(
+        (d) =>
+          (d.area_provinsi || "").includes(search) ||
+          (d.komoditas || "").includes(search) ||
+          (d.area_kota || "").includes(search)
+      );
+
+      return setFilteredData(temp || []);
     } else {
       const filtProv = (data || []).filter((d) =>
         filterProvinsi.includes(d.area_provinsi)
       );
       setFilteredData(filtProv);
     }
-  }, [data, filterProvinsi]);
+  }, [data, filterProvinsi, search]);
 
   const formatedDataArea: Array<SelectOptions> = useMemo(() => {
     const provinsi = (dataArea || []).map(({ province }) => province);
@@ -138,6 +149,15 @@ export default function FisheryPricesPage() {
                   width: "100%",
                 }}
               >
+                <div>
+                  <InputSearch
+                    label="Pencarian"
+                    callback={(v) => setSearch((String(v) || "").toUpperCase())}
+                  />
+                  <span style={{ fontSize: 13, marginTop: 8, color: "gray" }}>
+                    {`... ditemukan ${filteredData.length} data`}
+                  </span>
+                </div>
                 <SelectWithTag
                   defaultValue={formatedDataArea.map((opt) => opt.value)}
                   options={formatedDataArea}
