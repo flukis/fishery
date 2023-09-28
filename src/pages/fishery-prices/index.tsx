@@ -33,10 +33,22 @@ export default function FisheryPricesPage() {
 
       return setFilteredData(temp || []);
     } else {
-      const filtProv = (data || []).filter((d) =>
-        filterProvinsi.includes(d.area_provinsi)
+      if (search === "") {
+        const filtProv = (data || []).filter((d) =>
+          filterProvinsi.includes(d.area_provinsi)
+        );
+
+        return setFilteredData(filtProv);
+      }
+      const filtProv = (data || []).filter(
+        (d) =>
+          filterProvinsi.includes(d.area_provinsi) &&
+          ((d.area_provinsi || "").includes(search) ||
+            (d.komoditas || "").includes(search) ||
+            (d.area_kota || "").includes(search))
       );
-      setFilteredData(filtProv);
+
+      return setFilteredData(filtProv);
     }
   }, [data, filterProvinsi, search]);
 
