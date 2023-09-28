@@ -2,17 +2,32 @@ import { useMemo } from "react";
 import Paper from "../../modules/paper";
 import SelectWithTag from "../../modules/select-with-tag";
 import TableWithPagination from "../../modules/table";
-import useApiCall from "../../utils/data/api-calls";
+import { useApiCall, useApiWebWorker } from "../../utils/data/api-calls";
 
 import { type fisheryData } from "./loader";
 import { createColumnHelper } from "@tanstack/react-table";
 import { formatDate } from "../../utils/helpers/format-date";
 import { formatRupiah } from "../../utils/helpers/format-rupiah";
+import { SelectOptions } from "../../modules/select";
 
-const url = `https://stein.efishery.com/v1/storages/5e1edf521073e315924ceab4/list?limit=10&offset=0`;
+const url = `https://stein.efishery.com/v1/storages/5e1edf521073e315924ceab4/list`;
+const urlArea = `https://stein.efishery.com/v1/storages/5e1edf521073e315924ceab4/option_area`;
 
 export default function FisheryPricesPage() {
-  const { isLoading, data, error } = useApiCall(url);
+  const { isLoading, data, error } = useApiWebWorker(url);
+  const {
+    isLoading: idLoadingArea,
+    data: dataArea,
+    error: errorArea,
+  } = useApiCall(urlArea);
+
+  const formatedDataArea: Array<SelectOptions> = useMemo(() => {
+    const buf = (dataArea || []).map((d: { province: string }) => ({
+      value: d.province,
+      label: d.province,
+    }));
+    return buf;
+  }, [dataArea]);
 
   const columnHelper = createColumnHelper<fisheryData>();
 
@@ -90,25 +105,26 @@ export default function FisheryPricesPage() {
           </button>
         </div>
       </div>
-      <div className="paper__bodywrapper" style={{ marginBlock: "1.5rem" }}>
-        <SelectWithTag
-          defaultValue={[]}
-          options={[
-            { value: "option 1", label: "option 1" },
-            { value: "option 2", label: "option 2" },
-            { value: "option 3", label: "option 3" },
-            { value: "option 4", label: "option 4" },
-          ]}
-          callback={(val) => console.log(val)}
-        />
-      </div>
       <div>
         {isLoading ? (
           "Loading"
         ) : error ? (
           "Error"
         ) : (
-          <TableWithPagination data={data} columns={columns} key="table" />
+          <TableWithPagination
+            data={data || []}
+            columns={columns}
+            key="table"
+            renderedFilter={
+              <div>
+                <SelectWithTag
+                  defaultValue={formatedDataArea[0]}
+                  options={formatedDataArea}
+                  callback={(val) => console.log(val)}
+                />
+              </div>
+            }
+          />
         )}
       </div>
     </Paper>

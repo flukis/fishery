@@ -80,7 +80,7 @@ export default function SelectWithTag({
   options,
   callback,
 }: {
-  defaultValue: Array<string | number>;
+  defaultValue: SelectOptions;
   options: Array<SelectOptions>;
   callback: (val: Array<string | number>) => void;
 }) {

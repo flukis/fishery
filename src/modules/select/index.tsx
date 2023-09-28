@@ -1,6 +1,6 @@
 import Select from "react-select";
 
-type SelectOptions = {
+export type SelectOptions = {
   value: number | string;
   label: string;
 };
@@ -9,21 +9,22 @@ export default function InputSelect({
   defaultValue,
   options,
   callback,
+  placeholder,
 }: {
-  defaultValue: Array<string | number>;
+  defaultValue: SelectOptions;
   options: Array<SelectOptions>;
-  callback: (val: Array<string | number>) => void;
+  callback: (val: string | number) => void;
+  placeholder: string;
 }) {
   return (
     <div>
       <Select
-        defaultValue={defaultValue}
+        defaultValue={{ label: defaultValue.label, value: defaultValue.value }}
+        placeholder={placeholder}
         options={options}
         className="select-option_sm"
-        onChange={(options) => {
-          if (Array.isArray(options)) {
-            callback(options.map((opt) => opt.value));
-          }
+        onChange={(opt) => {
+          callback(opt.value);
         }}
       />
     </div>

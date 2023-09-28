@@ -1,23 +1,48 @@
 import {
   flexRender,
-  getCoreRowModel,
-  getPaginationRowModel,
   useReactTable,
+  getCoreRowModel,
+  getFilteredRowModel,
+  getPaginationRowModel,
 } from "@tanstack/react-table";
-import { useState } from "react";
+import { ReactNode, useState } from "react";
+
+import InputSelect, { SelectOptions } from "../select";
+
+const perPage: Array<SelectOptions> = [
+  {
+    label: "10",
+    value: 10,
+  },
+  {
+    label: "25",
+    value: 25,
+  },
+  {
+    label: "50",
+    value: 50,
+  },
+  {
+    label: "100",
+    value: 100,
+  },
+];
 
 export default function TableWithPagination({
   data,
   columns,
+  renderedFilter,
 }: {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   data: any;
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   columns: any;
+  renderedFilter: ReactNode;
 }) {
   const table = useReactTable({
     data,
     columns,
+    getFilteredRowModel: getFilteredRowModel(),
     getCoreRowModel: getCoreRowModel(),
     getPaginationRowModel: getPaginationRowModel(),
   });
@@ -31,7 +56,23 @@ export default function TableWithPagination({
   }));
 
   return (
-    <div style={{ overflowX: "auto" }}>
+    <div className="table-wrapper">
+      <div className="table-filter">
+        {renderedFilter}
+        <div>
+          <InputSelect
+            placeholder="Select per Page"
+            options={perPage}
+            defaultValue={{
+              label: String(table.getState().pagination.pageSize),
+              value: table.getState().pagination.pageSize,
+            }}
+            callback={(v) => {
+              table.setPageSize(Number(v));
+            }}
+          />
+        </div>
+      </div>
       <table>
         <thead>
           {table.getHeaderGroups().map((headerGroup) => (
@@ -77,67 +118,6 @@ export default function TableWithPagination({
           ))}
         </tfoot>
       </table>
-      <div>
-        <button
-          className="border rounded p-1"
-          onClick={() => table.setPageIndex(0)}
-          disabled={!table.getCanPreviousPage()}
-        >
-          {"<<"}
-        </button>
-        <button
-          className="border rounded p-1"
-          onClick={() => table.previousPage()}
-          disabled={!table.getCanPreviousPage()}
-        >
-          {"<"}
-        </button>
-        <button
-          className="border rounded p-1"
-          onClick={() => table.nextPage()}
-          disabled={!table.getCanNextPage()}
-        >
-          {">"}
-        </button>
-        <button
-          className="border rounded p-1"
-          onClick={() => table.setPageIndex(table.getPageCount() - 1)}
-          disabled={!table.getCanNextPage()}
-        >
-          {">>"}
-        </button>
-        <span className="flex items-center gap-1">
-          <div>Page</div>
-          <strong>
-            {table.getState().pagination.pageIndex + 1} of{" "}
-            {table.getPageCount()}
-          </strong>
-        </span>
-        <span className="flex items-center gap-1">
-          | Go to page:
-          <input
-            type="number"
-            defaultValue={table.getState().pagination.pageIndex + 1}
-            onChange={(e) => {
-              const page = e.target.value ? Number(e.target.value) - 1 : 0;
-              table.setPageIndex(page);
-            }}
-            className="border p-1 rounded w-16"
-          />
-        </span>
-        <select
-          value={table.getState().pagination.pageSize}
-          onChange={(e) => {
-            table.setPageSize(Number(e.target.value));
-          }}
-        >
-          {[10, 20, 30, 40, 50].map((pageSize) => (
-            <option key={pageSize} value={pageSize}>
-              Show {pageSize}
-            </option>
-          ))}
-        </select>
-      </div>
     </div>
   );
 }

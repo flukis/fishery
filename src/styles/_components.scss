@@ -120,7 +120,6 @@
 
 .select-option {
     width: 320px;
-    flex-shrink: 0;
 
     .select-option__checkbox_option {
         display: flex;
@@ -130,10 +129,22 @@
 
 .select-option_sm {
     width: 128px;
-    flex-shrink: 0;
 
     .select-option__checkbox_option {
         display: flex;
         gap: .5rem;
+    }
+}
+
+.table-wrapper {
+    margin-top: 2rem;
+
+    .table-filter {
+        display: flex;
+        width: 100%;
+        column-gap: 1.25rem;
+        margin-block: 1.25rem;
+        justify-content: end;
+        align-items: center;
     }
 }

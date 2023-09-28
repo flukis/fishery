@@ -1,6 +1,8 @@
 import { useState, useEffect } from "react";
 import axios from "axios";
 
+const worker = new Worker("./worker.js", { type: "module" });
+
 function useApiCall(apiUrl: string) {
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const [error, setError] = useState<Error | null | unknown>(null);
@@ -24,4 +26,30 @@ function useApiCall(apiUrl: string) {
   return { isLoading, data, error };
 }
 
-export default useApiCall;
+function useApiWebWorker(apiUrl: string) {
+  const [isLoading, setIsLoading] = useState<boolean>(true);
+  const [error, setError] = useState<Error | null | unknown>(null);
+  const [data, setData] = useState(null);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        worker.postMessage({ type: "through", url: apiUrl });
+        worker.onmessage = function (ev) {
+          const data = JSON.parse(ev.data);
+          setData(data);
+        };
+      } catch (err) {
+        setError(err);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    fetchData();
+  }, [apiUrl]);
+
+  return { isLoading, data, error };
+}
+
+export { useApiCall, useApiWebWorker };
