@@ -177,7 +177,7 @@ export default function FisheryPricesPage() {
           loading={isLoading}
           raiseError={error}
           renderedFilter={
-            <div className="fishery-table-filter">
+            <div className="table-filter__custom">
               <div>
                 <InputSearch
                   label="Pencarian"

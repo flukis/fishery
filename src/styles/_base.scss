@@ -24,6 +24,10 @@ $mobile-width: 480px;
 */
 * {
     margin: 0;
+} 
+
+html {
+    scroll-behavior: smooth;
 }
 /*
     Typographic tweaks!

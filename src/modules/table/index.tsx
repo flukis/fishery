@@ -57,11 +57,15 @@ export default function TableWithPagination({
     getSortedRowModel: getSortedRowModel(),
   });
 
+  const scrollToFirstRow = () => {
+    window.scrollTo(0, 96);
+  };
+
   return (
     <div className="table-wrapper">
       <div className="table-filter">
         {renderedFilter}
-        <div>
+        <div className="table-filter__per-page">
           <InputSelect
             label="Data Per Halaman"
             placeholder="Select per Page"
@@ -149,7 +153,10 @@ export default function TableWithPagination({
           <div className="table-pagination">
             <button
               className="prev"
-              onClick={() => table.previousPage()}
+              onClick={() => {
+                table.previousPage();
+                scrollToFirstRow();
+              }}
               disabled={!table.getCanPreviousPage()}
             >
               <span>Previous</span>
@@ -162,7 +169,10 @@ export default function TableWithPagination({
             </span>
             <button
               className="next"
-              onClick={() => table.nextPage()}
+              onClick={() => {
+                table.nextPage();
+                scrollToFirstRow();
+              }}
               disabled={!table.getCanNextPage()}
             >
               <span>Next</span>

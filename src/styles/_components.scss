@@ -77,9 +77,15 @@
     cursor: pointer;
     text-decoration: none;
 
+    span {
+        width: fit-content;
+        white-space: nowrap;
+    }
+
     svg {
         height: 24px;
         width: 24px;
+        flex-shrink: 0;
     }
 
     &:focus {
@@ -164,7 +170,7 @@
 }
 
 .select-option_default {
-    width: 320px;
+    width: 100%;
 }
 
 .select-option_sm {
@@ -186,8 +192,15 @@
             flex-direction: column;
         }
 
+        .table-filter__per-page {
+            display: block;
 
-        .fishery-table-filter {
+            @media screen and (max-width: $mobile-width) {
+                display: none;
+            }
+        }
+
+        .table-filter__custom {
             display: flex;
             justify-content: space-between;
             width: 100%;

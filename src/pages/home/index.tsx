@@ -2,7 +2,11 @@ import { Link } from "react-router-dom";
 export default function HomePage() {
   return (
     <main className="absolute-center">
-      <Link to="/fishery-price" className="btn btn-primary">
+      <Link
+        to="/fishery-price"
+        className="btn btn-primary"
+        style={{ paddingInline: "2rem" }}
+      >
         <span>Data Harga Perikanan</span>
         <svg
           width="17"
