@@ -179,6 +179,7 @@ export default function FisheryPricesPage() {
               <div>
                 <InputSearch
                   label="Pencarian"
+                  placeholder="Masukan kata kunci: komoditas, provinsi, kota, kabupaten"
                   callback={(v) => setSearch((String(v) || "").toUpperCase())}
                 />
                 <span style={{ fontSize: 13, marginTop: 8, color: "gray" }}>

@@ -31,14 +31,17 @@
         padding: 1rem; 
 
         .paper__titlewrapper {
-            flex-direction: column; 
+            align-items: start;
 
             .paper__title {
                 font-size: 1.25rem; 
+                width: 100%;
             }
 
             .paper__action {
-                margin-top: 1rem; 
+                span {
+                    display: none;
+                }
             }
         }
 
@@ -325,4 +328,16 @@
     display: flex;
     justify-content: center;
     align-items: center;
+}
+
+.sr-only {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border-width: 0;
 }

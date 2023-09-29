@@ -9,5 +9,6 @@ type fisheryData = {
 };
 const urlData = `https://stein.efishery.com/v1/storages/5e1edf521073e315924ceab4/list`;
 const urlArea = `https://stein.efishery.com/v1/storages/5e1edf521073e315924ceab4/option_area`;
+const urlSize = `https://stein.efishery.com/v1/storages/5e1edf521073e315924ceab4/option_size`;
 
-export { type fisheryData, urlData, urlArea };
+export { type fisheryData, urlData, urlArea, urlSize };
