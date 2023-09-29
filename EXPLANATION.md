@@ -1,6 +1,6 @@
 # Context
 
-There is a data from sheet [https://stein.efishery.com/v1/storages/5e1edf521073e315924ceab4/list](https://stein.efishery.com/v1/storages/5e1edf521073e315924ceab4/list), we need to serve that data, the data is about fishery price in some area, it have comodity name, city, province, price, size, and data creation date.
+There is a data from sheet [https://stein.efishery.com/v1/storages/5e1edf521073e315924ceab4/list](https://stein.efishery.com/v1/storages/5e1edf521073e315924ceab4/list), we need to serve that data, the data is about fishery price in some area, it have comodity (fish name), city, province, price, size, and data creation date.
 
 # Goals
 
@@ -24,16 +24,19 @@ The goals is have `search`, `sort`, and `filter` functionality so what i do is `
 
 ## Speed Problem
 
-My plan is use a webworker to cache the data with stale while revalidate method, but the problem is the API doesnt provide a header to inform `max-age` of the data so we need to do manually in client side.
+My plan is use a webworker to cache the data with stale while revalidate method, but the problem is the API doesnt provide a header to inform `max-age` of the data so we need to do manually in client side, need to found a way to do caching without that `max-age` information.
 
 ## Mobile View And Desktop View
 
-I come with approach __adaptive design__ not __responsive__ design, it will fit based on screen width before the render.
+I come with approach __adaptive design__ not __responsive__ design, icome with this approach because i think server data on mobile and desktp is different and need different view. In __addaptive design__, it will fit the look of the table based on screen width, it happen before the render.
+
+1. Desktop View
 For the desktop view, i come with common solution that is showing list of data using table with pagination.
 
 ![Screenshot from desktop view](desktop-view.png)
 
-For the mobile view, i come with approach to combine some data and leaving only 2 column, the `Komoditas` and `Price`, in `Komoditas` i combine data from the `size`, `province` and `city` to it so i can get compact view that still __readable from my perspective__.
+2. Mobile View
+For the mobile view, i come with approach to combine some data and leaving only 2 column, the `Komoditas` and `Price`, in `Komoditas` i combine data from the `size`, `province` and `city`, with this approach i can get compact view that still __readable from my perspective__.
 
 ![Screenshot from mobile view](mobile-view.png)
 
@@ -46,5 +49,6 @@ For the mobile view, i come with approach to combine some data and leaving only 
 
 ## Input New Data
 
-I come with basic approach, when user click the button, it will show a modal with form inside it.
-![Tambah Data](tambah-data.png)
+I come with basic approach, when user click the button, it will show a modal with form inside it, use can fill fish name, price, area (province and city), and size and then save the new data.
+Data in select for the area was come from [https://stein.efishery.com/v1/storages/5e1edf521073e315924ceab4/option_area](https://stein.efishery.com/v1/storages/5e1edf521073e315924ceab4/option_area) and the size select come from [https://stein.efishery.com/v1/storages/5e1edf521073e315924ceab4/option_size](https://stein.efishery.com/v1/storages/5e1edf521073e315924ceab4/option_size)
+![Tambah Data](tambah-data.png).
