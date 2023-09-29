@@ -24,7 +24,7 @@ The goals is have `search`, `sort`, and `filter` functionality so what i do is `
 
 ## Speed Problem
 
-My plan is use a webworker to cache the data with stale while revalidate method, but the problem is the API doesnt provide a header to inform `max-age` of the data so we need to do manually in client side, need to found a way to do caching without that `max-age` information.
+My plan is use a webworker to cache the data with stale while revalidate strategy, but the problem is the API doesnt provide a header to inform `max-age` of the data so we need to do manually in client side, need to found a way to do caching without that `max-age` information.
 
 ## Mobile View And Desktop View
 
@@ -51,4 +51,5 @@ For the mobile view, i come with approach to combine some data and leaving only 
 
 I come with basic approach, when user click the button, it will show a modal with form inside it, use can fill fish name, price, area (province and city), and size and then save the new data.
 Data in select for the area was come from [https://stein.efishery.com/v1/storages/5e1edf521073e315924ceab4/option_area](https://stein.efishery.com/v1/storages/5e1edf521073e315924ceab4/option_area) and the size select come from [https://stein.efishery.com/v1/storages/5e1edf521073e315924ceab4/option_size](https://stein.efishery.com/v1/storages/5e1edf521073e315924ceab4/option_size)
+
 ![Tambah Data](tambah-data.png).
