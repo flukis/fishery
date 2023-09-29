@@ -16,7 +16,7 @@ The desired goals are:
 
 # Problems
 
-Problem come from the API, the API have limited capability for pagination, it just have `limit` to limit per page and `offset` to cursoring the page number, this information based on the documentation [https://docs.steinhq.com/read-data ](https://docs.steinhq.com/read-data), it doesnt have sorting, filter `LIKE` so i dont want to use the `limit` and `offset`.
+Problem come from the API, the API have limited capability for pagination, it just have `limit` to limit per page and `offset` to cursoring the page number, this information based on the documentation [https://docs.steinhq.com/read-data ](https://docs.steinhq.com/read-data), it doesnt have common feature for pagination like a search or sorting or filetring in the params so i dont want to use the `limit` and `offset`.
 
 The goals is have `search`, `sort`, and `filter` functionality so what i do is `fetch` all data without `limit` and `offset` params, and yes it will give a problem related with loading speed on client side.
 
