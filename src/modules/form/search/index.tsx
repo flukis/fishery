@@ -12,9 +12,10 @@ export default function InputSearch({
   const [s, setS] = useState("");
   return (
     <div>
-      <label>{label}</label>
+      <label htmlFor={(label || "").trim()}>{label}</label>
       <div className="input-search">
         <input
+          id={(label || "").trim()}
           onKeyDown={(e) => {
             if (e.key === "Enter") callback(s);
           }}

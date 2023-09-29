@@ -8,7 +8,7 @@ import {
 } from "@tanstack/react-table";
 import { ReactNode, useState } from "react";
 
-import InputSelect, { SelectOptions } from "../select";
+import InputSelect, { SelectOptions } from "../form/select";
 
 const perPage: Array<SelectOptions> = [
   {

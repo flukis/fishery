@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import SideModal from "../../modules/sidemodal";
+import SideModal from "../../modules/layout/sidemodal";
 import JsonToForm from "json-reactform";
 import { useApiCall } from "../../utils/data/api-calls";
 import { urlArea, urlSize } from "./loader";

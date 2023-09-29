@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useState } from "react";
 import Paper from "../../modules/paper";
-import SelectWithTag from "../../modules/select-with-tag";
+import SelectWithTag from "../../modules/form/select-with-tag";
 import TableWithPagination from "../../modules/table";
 import { useApiCall, useApiWebWorker } from "../../utils/data/api-calls";
 
@@ -8,9 +8,9 @@ import { type fisheryData } from "./loader";
 import { createColumnHelper } from "@tanstack/react-table";
 import { formatDate } from "../../utils/helpers/format-date";
 import { formatRupiah } from "../../utils/helpers/format-rupiah";
-import { SelectOptions } from "../../modules/select";
+import { SelectOptions } from "../../modules/form/select";
 import { urlArea, urlData } from "./loader";
-import InputSearch from "../../modules/search";
+import InputSearch from "../../modules/form/search";
 import AddNewData from "./add-new-data";
 import useCheckMobileScreen from "../../utils/screen/check-is-mobile";
 

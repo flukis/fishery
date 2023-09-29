@@ -96,6 +96,7 @@ export default function SelectWithTag({
     <div>
       <label htmlFor={label.trim()}>{label}</label>
       <Select
+        id={(label || "").trim()}
         placeholder={placeholder}
         defaultValue={defaultValue}
         isMulti

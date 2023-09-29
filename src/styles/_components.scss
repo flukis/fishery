@@ -266,6 +266,10 @@
         font-size: .875rem;
         color: $dark-gray;
         margin-bottom: .25rem;
+    
+        @media screen and (max-width: $mobile-width) {
+            visibility: hidden;
+        }
     }
 
     input{

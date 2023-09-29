@@ -1,4 +1,28 @@
-# Progression
+# Fishery Data
+
+## Stack
+- `React >18`
+- `Vite`
+- `Efishery/json-reactform`, to auto generate form using json file declaration, see more detail [here](https://github.com/eFishery/json-reactform)
+- `react-table` v8
+- `react-select`
+
+All stack that i choose is stack that already know (except for json-reactform), so it easier to get productive.
+
+## Hot To Navigate This Project
+- `src/pages`: all pages will put in, page like home, about, or anything you want
+- `src/main`: if you want add more pages you need to register your page here
+- `utils`: all helpers here, include the custom hooks
+- `modules`: all component goes here
+
+## How To Run This Project
+1. You need NPM and Node, install latest LTS.
+2. I use PNPM so install it using command `npm install -g pnpm`
+3. Clone this repo
+4. Enter the root folder of this project and type `pnpm install`, it will install a whole internet (just kidding)
+5. Run this project by typing `npm run dev`.
+
+## Progression
 
 - [x] Show data to table
 - [x] Add filter by province
@@ -6,8 +30,10 @@
 - [x] Table sort using column
 - [x] Cache for the list
 - [x] Add data using "Tambah" button
+- [x] Responsive Mobile
 - [ ] PWA
 - [ ] Solution for other cache
 - [ ] Write documentation
 - [ ] Write the unit test
-- [x] Responsive Mobile
+
+For test assesment purpose
