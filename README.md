@@ -1,4 +1,5 @@
 # Fishery Data
+This is for test assesment purpose. Open Preview -> [https://test-fishery-f.netlify.app/fishery-price](https://test-fishery-f.netlify.app/fishery-price)
 
 ## Stack
 - `React >18`
@@ -31,9 +32,5 @@ All stack that i choose is stack that already know (except for json-reactform), 
 - [x] Cache for the list
 - [x] Add data using "Tambah" button
 - [x] Responsive Mobile
-- [ ] PWA
-- [ ] Solution for other cache
-- [ ] Write documentation
-- [ ] Write the unit test
+- [x] Write documentation
 
-For test assesment purpose
