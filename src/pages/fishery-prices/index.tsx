@@ -2,7 +2,7 @@ import { useEffect, useMemo, useState } from "react";
 import Paper from "../../modules/paper";
 import SelectWithTag from "../../modules/form/select-with-tag";
 import TableWithPagination from "../../modules/table";
-import { useApiCall, useApiWebWorker } from "../../utils/data/api-calls";
+import { useApiCall } from "../../utils/data/api-calls";
 
 import { type fisheryData } from "./loader";
 import { createColumnHelper } from "@tanstack/react-table";
@@ -20,7 +20,9 @@ export default function FisheryPricesPage() {
 
   const [filteredData, setFilteredData] = useState([]);
   const [search, setSearch] = useState("");
-  const [filterProvinsi, setFilterProvinsi] = useState<Array<string>>([]);
+  const [filterProvinsi, setFilterProvinsi] = useState<Array<string | number>>(
+    []
+  );
 
   useEffect(() => {
     if (filterProvinsi.length == 0) {
