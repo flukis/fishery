@@ -46,6 +46,7 @@ For the mobile view, i come with approach to combine some data and leaving only 
 - Filter based on Province, it will filter based on the province user choose, user can choose multiple province to it.
 - Per page, basic functionality for pagination, user can choose to show 10, 25, 50, or 100.
 - Bottom navigation: navigation using Next and Previous.
+- Client side navigation: all navigation is done in client side, no API call when we do search, sort, filter, or move to the other page.
 
 ## Input New Data
 
