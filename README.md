@@ -10,6 +10,8 @@ This is for test assesment purpose. Open Preview -> [https://test-fishery-f.netl
 
 All stack that i choose is stack that already know (except for json-reactform), so it easier to get productive.
 
+I don't use any state management because i don't need for now, if on future need a state management i will use Jotai or Zustand.
+
 ## Hot To Navigate This Project
 - `src/pages`: all pages will put in, page like home, about, or anything you want
 - `src/main.tsx`: if you want add more pages you need to register your page here
