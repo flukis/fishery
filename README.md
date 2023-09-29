@@ -12,9 +12,9 @@ All stack that i choose is stack that already know (except for json-reactform), 
 
 ## Hot To Navigate This Project
 - `src/pages`: all pages will put in, page like home, about, or anything you want
-- `src/main`: if you want add more pages you need to register your page here
-- `utils`: all helpers here, include the custom hooks
-- `modules`: all component goes here
+- `src/main.tsx`: if you want add more pages you need to register your page here
+- `src/utils`: all helpers here, include the custom hooks
+- `src/modules`: all component goes here
 
 ## How To Run This Project
 1. You need NPM and Node, install latest LTS.
