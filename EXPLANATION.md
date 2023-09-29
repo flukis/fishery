@@ -18,7 +18,7 @@ The desired goals are:
 
 Problem come from the API, the API have limited capability for pagination, it just have `limit` to limit per page and `offset` to cursoring the page number, this information based on the documentation [https://docs.steinhq.com/read-data ](https://docs.steinhq.com/read-data), it doesnt have common feature for pagination like a search or sorting or filetring in the params so i dont want to use the `limit` and `offset`.
 
-The goals is have `search`, `sort`, and `filter` functionality so what i do is `fetch` all data without `limit` and `offset` params, and yes it will give a problem related with loading speed on client side.
+According yo that problem and what is our goals to have `search`, `sort`, and `filter` functionality, so what i did is `fetch` all data without `limit` and `offset` params, and yes it will give a problem related with loading speed on client side.
 
 # Solution
 
@@ -26,9 +26,11 @@ The goals is have `search`, `sort`, and `filter` functionality so what i do is `
 
 My plan is use a webworker to cache the data with stale while revalidate strategy, but the problem is the API doesnt provide a header to inform `max-age` of the data so we need to do manually in client side, need to found a way to do caching without that `max-age` information.
 
+For now, i just get data from server every visit or reloading page.
+
 ## Mobile View And Desktop View
 
-I come with approach __adaptive design__ not __responsive__ design, icome with this approach because i think server data on mobile and desktp is different and need different view. In __addaptive design__, it will fit the look of the table based on screen width, it happen before the render.
+I come with approach __adaptive design__ not __responsive design__, i come with this approach because i think serve data on mobile and desktop is different and need different on how its look. In __addaptive design__, it will fit the UI based on screen width.
 
 1. Desktop View
 For the desktop view, i come with common solution that is showing list of data using table with pagination.
@@ -42,8 +44,8 @@ For the mobile view, i come with approach to combine some data and leaving only 
 
 ## Functionality
 
-- Search, this search input is searching for data from komoditi, province, and city. It also give information how much data found.
-- Filter based on Province, it will filter based on the province user choose, user can choose multiple province to it.
+- Search, this search input is searching for data from comodity(fish name), province, and city. It also give information how much data found.
+- Filter based on Province, it will filter based on the province user choose, user can choose multiple province.
 - Per page, basic functionality for pagination, user can choose to show 10, 25, 50, or 100.
 - Bottom navigation: navigation using Next and Previous.
 - Client side navigation: all navigation is done in client side, no API call when we do search, sort, filter, or move to the other page.
