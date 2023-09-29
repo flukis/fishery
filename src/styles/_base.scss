@@ -9,10 +9,8 @@ $light-gray: #6b7280;
 $dark-gray: #313131;
 // Desktop Width
 $desktop-width: 1200px;
-// Tablet Width
-$tablet-width: 768px;
 // Mobile Width
-$mobile-width: 360px;
+$mobile-width: 480px;
 
 // reset
 /*
@@ -128,6 +126,11 @@ table {
     border-radius: .25rem;
     overflow: hidden;
     color: $dark-gray;
+
+
+    @media screen and (max-width: $mobile-width) {
+        white-space: normal;
+    }
 
     th {
         text-align: left;

@@ -10,4 +10,4 @@
 - [ ] Solution for other cache
 - [ ] Write documentation
 - [ ] Write the unit test
-- [ ] Responsive Mobile <- IMPORTANT
+- [x] Responsive Mobile

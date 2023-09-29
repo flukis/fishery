@@ -11,9 +11,11 @@ import { formatRupiah } from "../../utils/helpers/format-rupiah";
 import { SelectOptions } from "../../modules/select";
 import { urlArea, urlData } from "./loader";
 import InputSearch from "../../modules/search";
+import AddNewData from "./add-new-data";
+import useCheckMobileScreen from "../../utils/screen/check-is-mobile";
 
 export default function FisheryPricesPage() {
-  const { isLoading, data, error } = useApiWebWorker(urlData);
+  const { isLoading, data, error } = useApiCall(urlData);
   const { isLoading: isLoadingArea, data: dataArea } = useApiCall(urlArea);
 
   const [filteredData, setFilteredData] = useState([]);
@@ -66,122 +68,138 @@ export default function FisheryPricesPage() {
 
   const columnHelper = createColumnHelper<fisheryData>();
 
-  const columns = useMemo(
-    () => [
-      columnHelper.accessor("komoditas", {
-        size: 180,
-        cell: (info) => {
-          return <div style={{ fontWeight: 600 }}>{info.getValue()}</div>;
-        },
-        header: () => "Komoditi",
-      }),
-      columnHelper.accessor("area_provinsi", {
-        size: 300,
-        cell: ({ row: { original } }) => {
-          return `${original.area_kota}, ${original.area_provinsi}`;
-        },
-        header: () => "Daerah",
-      }),
-      columnHelper.accessor("price", {
-        size: 180,
-        cell: (info) => {
-          return (
-            <div
-              style={{
-                textAlign: "right",
-                fontFamily: "mono",
-              }}
-            >
-              {formatRupiah(info.getValue())}
-            </div>
-          );
-        },
-        header: () => <div style={{ textAlign: "right" }}>Harga</div>,
-      }),
-      columnHelper.accessor("size", {
-        cell: (info) => {
-          return <div style={{ textAlign: "right" }}>{info.getValue()}</div>;
-        },
-        header: () => <div style={{ textAlign: "right" }}>Ukuran</div>,
-      }),
-      columnHelper.accessor("tgl_parsed", {
-        cell: (info) => {
-          return (
-            <div style={{ textAlign: "center" }}>
-              {formatDate(info.getValue())}
-            </div>
-          );
-        },
-        header: () => <div style={{ textAlign: "center" }}>Tanggal</div>,
-      }),
-    ],
-    []
-  );
+  const isMobile = useCheckMobileScreen();
+
+  const columns = useMemo(() => {
+    return isMobile
+      ? [
+          columnHelper.accessor("area_provinsi", {
+            cell: ({ row: { original } }) => {
+              return (
+                <div>
+                  <span>
+                    <strong>{original.komoditas}</strong>
+                    {` ukuran `}
+                    <b>{original.size}</b>
+                  </span>
+                  <br />
+                  <span style={{ fontSize: ".75rem" }}>
+                    {`${original.area_kota}, ${original.area_provinsi}`}
+                  </span>
+                </div>
+              );
+            },
+            header: () => "Komoditas",
+          }),
+          columnHelper.accessor("price", {
+            cell: (info) => {
+              return (
+                <div
+                  style={{
+                    textAlign: "right",
+                    fontFamily: "mono",
+                  }}
+                >
+                  {formatRupiah(info.getValue())}
+                </div>
+              );
+            },
+            header: () => <div style={{ textAlign: "right" }}>Harga</div>,
+          }),
+        ]
+      : [
+          columnHelper.accessor("komoditas", {
+            size: 180,
+            cell: (info) => {
+              return <div style={{ fontWeight: 600 }}>{info.getValue()}</div>;
+            },
+            header: () => "Komoditi",
+          }),
+          columnHelper.accessor("area_provinsi", {
+            size: 300,
+            cell: ({ row: { original } }) => {
+              return `${original.area_kota}, ${original.area_provinsi}`;
+            },
+            header: () => "Daerah",
+          }),
+          columnHelper.accessor("price", {
+            size: 180,
+            cell: (info) => {
+              return (
+                <div
+                  style={{
+                    textAlign: "right",
+                    fontFamily: "mono",
+                  }}
+                >
+                  {formatRupiah(info.getValue())}
+                </div>
+              );
+            },
+            header: () => <div style={{ textAlign: "right" }}>Harga</div>,
+          }),
+          columnHelper.accessor("size", {
+            cell: (info) => {
+              return (
+                <div style={{ textAlign: "right" }}>{info.getValue()}</div>
+              );
+            },
+            header: () => <div style={{ textAlign: "right" }}>Ukuran</div>,
+          }),
+          columnHelper.accessor("tgl_parsed", {
+            cell: (info) => {
+              return (
+                <div style={{ textAlign: "center" }}>
+                  {formatDate(info.getValue())}
+                </div>
+              );
+            },
+            header: () => <div style={{ textAlign: "center" }}>Tanggal</div>,
+          }),
+        ];
+  }, []);
 
   return (
     <Paper>
       <div className="paper__titlewrapper">
         <h2 className="paper__title">Data Harga Perikanan</h2>
         <div className="paper__action">
-          <button className="btn btn-primary">
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              width="24"
-              height="24"
-              viewBox="0 0 24 24"
-              strokeWidth="2"
-              stroke="currentColor"
-              fill="none"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-            >
-              <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
-              <path d="M12 5l0 14"></path>
-              <path d="M5 12l14 0"></path>
-            </svg>
-            <span>Tambah Data</span>
-          </button>
+          <AddNewData />
         </div>
       </div>
       <div>
-        {isLoading ? (
-          "Loading"
-        ) : error ? (
-          "Error"
-        ) : (
-          <TableWithPagination
-            data={filteredData}
-            columns={columns}
-            key="table"
-            renderedFilter={
-              <div
-                style={{
-                  display: "flex",
-                  justifyContent: "space-between",
-                  width: "100%",
-                }}
-              >
-                <div>
-                  <InputSearch
-                    label="Pencarian"
-                    callback={(v) => setSearch((String(v) || "").toUpperCase())}
-                  />
-                  <span style={{ fontSize: 13, marginTop: 8, color: "gray" }}>
-                    {`... ditemukan ${filteredData.length} data`}
-                  </span>
-                </div>
-                <SelectWithTag
-                  defaultValue={formatedDataArea.map((opt) => opt.value)}
-                  options={formatedDataArea}
-                  callback={(v) => setFilterProvinsi(v)}
-                  placeholder="Pilih Provinsi"
-                  label="Filter berdasarkan Provinsi"
-                  loading={isLoadingArea}
+        <TableWithPagination
+          data={filteredData}
+          columns={columns}
+          key="table"
+          loading={isLoading}
+          raiseError={error}
+          renderedFilter={
+            <div className="fishery-table-filter">
+              <div>
+                <InputSearch
+                  label="Pencarian"
+                  callback={(v) => setSearch((String(v) || "").toUpperCase())}
                 />
+                <span style={{ fontSize: 13, marginTop: 8, color: "gray" }}>
+                  ... ditemukan{" "}
+                  <strong style={{ color: "#212121" }}>
+                    {filteredData.length}
+                  </strong>{" "}
+                  data
+                </span>
               </div>
-            }
-          />
-        )}
+              <SelectWithTag
+                defaultValue={formatedDataArea.map((opt) => opt.value)}
+                options={formatedDataArea}
+                callback={(v) => setFilterProvinsi(v)}
+                placeholder="Pilih Provinsi"
+                label="Filter berdasarkan Provinsi"
+                loading={isLoadingArea}
+              />
+            </div>
+          }
+        />
       </div>
     </Paper>
   );
