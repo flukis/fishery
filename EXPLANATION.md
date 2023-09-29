@@ -1,58 +1,57 @@
 # Context
 
-There is a data from sheet [https://stein.efishery.com/v1/storages/5e1edf521073e315924ceab4/list](https://stein.efishery.com/v1/storages/5e1edf521073e315924ceab4/list), we need to serve that data, the data is about fishery price in some area, it have comodity (fish name), city, province, price, size, and data creation date.
+There is data from the sheet [https://stein.efishery.com/v1/storages/5e1edf521073e315924ceab4/list](https://stein.efishery.com/v1/storages/5e1edf521073e315924ceab4/list). We need to serve this data, which is about fishery prices in various areas. It includes commodities (fish names), cities, provinces, prices, sizes, and data creation dates.
 
 # Goals
 
-We need a basic features like:
-1. View and search for the desired data list
-2. Sort and filter data based on the desired column
-3. Add data to the price "list".
+We need basic features:
+
+1. View and search for the desired data list.
+2. Sort and filter data based on the desired column.
+3. Add data to the price "list."
 
 The desired goals are:
-1. A pleasant experience to search and view data
-2. Enjoyable experience for adding data
-3. A display that can be enjoyed comfortably on desktop or mobile
+
+1. A pleasant experience for searching and viewing data.
+2. An enjoyable experience for adding data.
+3. A display that can be comfortably enjoyed on both desktop and mobile.
 
 # Problems
 
-Problem come from the API, the API have limited capability for pagination, it just have `limit` to limit per page and `offset` to cursoring the page number, this information based on the documentation [https://docs.steinhq.com/read-data ](https://docs.steinhq.com/read-data), it doesnt have common feature for pagination like a search or sorting or filetring in the params so i dont want to use the `limit` and `offset`.
+The problem arises from the API, which has limited pagination capabilities. It only offers a 'limit' to set items per page and 'offset' for paging, as mentioned in the documentation [https://docs.steinhq.com/read-data](https://docs.steinhq.com/read-data). It lacks common pagination features like search, sorting, or filtering in the parameters, so I choose not to use 'limit' and 'offset' due to that limitation.
 
-According yo that problem and what is our goals to have `search`, `sort`, and `filter` functionality, so what i did is `fetch` all data without `limit` and `offset` params, and yes it will give a problem related with loading speed on client side.
+Considering this problem and our goals of having search, sort, and filter functionality, I fetch all data without 'limit' and 'offset', although it may lead to slower loading on the client side.
 
 # Solution
 
 ## Speed Problem
 
-My plan is use a webworker to cache the data with stale while revalidate strategy, but the problem is the API doesnt provide a header to inform `max-age` of the data so we need to do manually in client side, need to found a way to do caching without that `max-age` information.
+My plan is to use a web worker to cache data with a stale-while-revalidate strategy. However, the API doesn't provide a header to inform the 'max-age' of the data, so we need to handle caching manually on the client side. For now, I fetch data from the server on every visit or page reload.
 
-For now, i just get data from server every visit or reloading page.
+## Mobile View and Desktop View
 
-## Mobile View And Desktop View
+I propose an adaptive design approach rather than a responsive one because serving data on mobile and desktop requires different layouts. In adaptive design, the UI adapts based on the screen width.
 
-I come with approach __adaptive design__ not __responsive design__, i come with this approach because i think serve data on mobile and desktop is different and need different on how its look. In __addaptive design__, it will fit the UI based on screen width.
+1. **Desktop View**
+   For the desktop view, I suggest a common solution: displaying a list of data using a table with pagination.
+   
+   ![Screenshot from desktop view](desktop-view.png)
 
-1. Desktop View
-For the desktop view, i come with common solution that is showing list of data using table with pagination.
-
-![Screenshot from desktop view](desktop-view.png)
-
-2. Mobile View
-For the mobile view, i come with approach to combine some data and leaving only 2 column, the `Komoditas` and `Price`, in `Komoditas` i combine data from the `size`, `province` and `city`, with this approach i can get compact view that still __readable from my perspective__.
-
-![Screenshot from mobile view](mobile-view.png)
+2. **Mobile View**
+   For the mobile view, I recommend combining some data and displaying only two columns: 'Komoditas' and 'Price'. In the 'Komoditas' column, I combine data from 'size', 'province', and 'city' to achieve a compact yet readable view from my perspective.
+   
+   ![Screenshot from mobile view](mobile-view.png)
 
 ## Functionality
 
-- Search, this search input is searching for data from comodity(fish name), province, and city. It also give information how much data found.
-- Filter based on Province, it will filter based on the province user choose, user can choose multiple province.
-- Per page, basic functionality for pagination, user can choose to show 10, 25, 50, or 100.
-- Bottom navigation: navigation using Next and Previous.
-- Client side navigation: all navigation is done in client side, no API call when we do search, sort, filter, or move to the other page.
+- **Search**: The search input searches for data based on commodity (fish name), province, and city. It also provides information about the number of matching data.
+- **Filter by Province**: Users can filter data based on the selected province, and they can choose multiple provinces.
+- **Per Page**: Basic pagination functionality, allowing users to display 10, 25, 50, or 100 items per page.
+- **Bottom Navigation**: Navigation options using Next and Previous.
+- **Client-Side Navigation**: All navigation is performed on the client side, with no API calls when searching, sorting, filtering, or moving to other pages.
 
 ## Input New Data
 
-I come with basic approach, when user click the button, it will show a modal with form inside it, use can fill fish name, price, area (province and city), and size and then save the new data.
-Data in select for the area was come from [https://stein.efishery.com/v1/storages/5e1edf521073e315924ceab4/option_area](https://stein.efishery.com/v1/storages/5e1edf521073e315924ceab4/option_area) and the size select come from [https://stein.efishery.com/v1/storages/5e1edf521073e315924ceab4/option_size](https://stein.efishery.com/v1/storages/5e1edf521073e315924ceab4/option_size)
+I suggest a straightforward approach: when the user clicks the button, a modal with a form appears. Users can fill in fish name, price, area (province and city), and size, and then save the new data. The area options are fetched from [https://stein.efishery.com/v1/storages/5e1edf521073e315924ceab4/option_area](https://stein.efishery.com/v1/storages/5e1edf521073e315924ceab4/option_area), and the size options come from [https://stein.efishery.com/v1/storages/5e1edf521073e315924ceab4/option_size](https://stein.efishery.com/v1/storages/5e1edf521073e315924ceab4/option_size).
 
 ![Tambah Data](tambah-data.png).
