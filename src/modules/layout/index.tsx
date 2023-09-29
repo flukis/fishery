@@ -14,7 +14,7 @@ export default function Layout() {
         <Outlet />
       </div>
       <footer>
-        <p>&copy; for eFishery test assesment purposes.</p>
+        <p>for eFishery test assesment purposes.</p>
       </footer>
     </main>
   );
